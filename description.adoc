@@ -4,7 +4,29 @@ Linux supports some mechanisms to allow comunication between processes and betwe
 Here will be the list of the IPC examples and some examples
 
 ==== Signals
-Signaling asynchronous event to one and more processes. Unix operating system maintain *two integers* for *pending signals* and *blocked signals* .
+
+Linux supports:
+* POSX Reliable Signals (Standard Signals)
+* POSX Real-Time Signals
+
+*Signals dispositions* are same for all threads in the process and can be cloned by *fork()*:
+
+* Term - default action is to terminate process
+* Ign - default action is to ignore signal
+* Core - default action is to terminate process and do the core dump
+* Stop - defualt aciton is to stop the process
+* Cont - defualt action is to continue process if currently stoped
+
+Unix operating system maintain signals by two integers:
+
+* blocked signals (they appear not deliveared so looks pending)
+* pending signals
+
+The signals can be targeted like:
+
+* process-directed
+* thread-directed
+
 There are two types if signal handlers:
 * Default signal handler
 * User Defined Signal handler
@@ -31,4 +53,5 @@ Normally processes can send signals to the processes with the same *uid* and *gi
 
 === References
  * Linux Documentation link:https://tldp.org/LDP/tlk/ipc/ipc.html[link]
+ * Singnal description in Manual link:https://man7.org/linux/man-pages/man7/signal.7.html[link]
 

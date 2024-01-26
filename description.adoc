@@ -6,8 +6,16 @@ Here will be the list of the IPC examples and some examples
 ==== Signals
 
 Linux supports:
+
 * POSX Reliable Signals (Standard Signals)
-* POSX Real-Time Signals
+** SIGKILL (Term)
+** SIGSTOP (Stop)
+** SIGABRT (Core)
+
+* POSX Real-Time Signals (queued, in guaraneed order)
+** SIGRTMIN
+** All signals can be used for application purposes
+** SIGRTMAX
 
 *Signals dispositions* are same for all threads in the process and can be cloned by *fork()*:
 

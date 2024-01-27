@@ -1,9 +1,64 @@
-=== Interprocess Communication
+= Interprocess Communication
 
 Linux supports some mechanisms to allow comunication between processes and between process and kernel.
 Here will be the list of the IPC examples and some examples
+The processes can be created mainly in two ways:
 
-==== Signals
+* start from terminal
+* *fork()* the current process to the child process form it
+
+== Shared Files
+It is the most basic mechanism to share the for IPC. Basicaly one process creates and write to the file and another process reads the file.
+The obvious issue is *race condition* as one process writes and another reads in the same time. The simple mecahnisme to protect could be:
+
+* *exclusive lock* for writer
+* *shared lock* for readers
+
+example writer program
+----
+  #include <fcntl.h>
+
+  struct flock lock;
+  lock.l_type = F_WRLCK;    /* read/write (exclusive versus shared) lock */
+  lock.l_whence = SEEK_SET; /* base for seek offsets */
+  lock.l_start = 0;         /* 1st byte in file */
+  lock.l_len = 0;           /* 0 here means 'until EOF' */
+  lock.l_pid = getpid();    /* process id */
+  int fd = open(fileName, O_RDWR | O_CREAT, 0666)
+  // try to set the lock
+  int ret = fcnt(fd, F_SETLK, &lock);
+  if (ret == 0)
+  {
+    write(fd, dataString, strLen(dataString));
+  }
+  // release lock
+  lock.l_type=F_UNLCK;
+  fcntl(fd, F_SETLK, &lock)
+  close(fd);
+----
+example reader program
+----
+  struct flock lock;
+  lock.l_type = F_WRLCK;    /* read/write (exclusive) lock */
+  lock.l_whence = SEEK_SET; /* base for seek offsets */
+  lock.l_start = 0;         /* 1st byte in file */
+  lock.l_len = 0;           /* 0 here means 'until EOF' */
+  lock.l_pid = getpid();    /* process id */
+  int fd = open(fileName, O_RONLY)
+  fcntl(fd, F_GETLK, &lock); // if the write-locked not continue
+  if (lock.l_type == F_UNLCK) // is unlocked
+  {
+    lock.l_type = F_RDLCK; // do not write if read
+    fcntl(fd, F_SETLK, &lock)
+    read(fd, &c, 1)
+    lock.l_type = F_UNLCK;
+    fcntl(fd, F_SETLK, &lock)
+  }
+  close(fd)
+
+----
+
+== Signals
 
 Linux supports:
 
@@ -54,11 +109,14 @@ kill -s <signal-name> <process-id>
 Some signals can be ignored except SIGSTOP and SIGKILL.
 Normally processes can send signals to the processes with the same *uid* and *gid* or the process with the same process group. Kernel and super user can send signal to everybody.
 
+== Sockets
 
 
-=== References
+
+== References
  * Linux Documentation link:https://tldp.org/LDP/tlk/ipc/ipc.html[link]
  * Singnal description in Manual link:https://man7.org/linux/man-pages/man7/signal.7.html[link]
  * Useful Video link:https://www.youtube.com/watch?v=83M5-NPDeWsp[link]
  * Linux Manual Pages link:https://linux.die.net/man/[link]
+ * Article about all IPC options link:https://opensource.com/article/19/4/interprocess-communication-linux-storage[link]
 

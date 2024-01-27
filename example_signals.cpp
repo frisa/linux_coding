@@ -15,12 +15,13 @@ void handler(int num)
 
 int main()
 {
-    unsigned int cnt=0;
+    unsigned int cnt = 0;
     signal(SIGINT, handler);
     signal(SIGTERM, handler);
     signal(SIGKILL, handler);
-    while (true){
-        std::cout << cnt++ << ": process running (pid: " << getpid() << ")"<< std::endl;
+    while (true)
+    {
+        std::cout << cnt++ << ": process running (pid: " << getpid() << ")" << std::endl;
         sleep(1);
     }
     return 0;

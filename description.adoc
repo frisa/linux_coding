@@ -7,12 +7,12 @@ Here will be the list of the IPC examples and some examples
 
 Linux supports:
 
-* POSX Reliable Signals (Standard Signals)
+* POSIX Reliable Signals (Standard Signals)
 ** SIGKILL (Term)
 ** SIGSTOP (Stop)
 ** SIGABRT (Core)
 
-* POSX Real-Time Signals (queued, in guaraneed order)
+* POSIX Real-Time Signals (queued, in guaraneed order)
 ** SIGRTMIN
 ** All signals can be used for application purposes
 ** SIGRTMAX
@@ -47,6 +47,10 @@ the output on macOS is:
 ----
 HUP INT QUIT ILL TRAP ABRT EMT FPE KILL BUS SEGV SYS PIPE ALRM TERM URG STOP TSTP CONT CHLD TTIN TTOU IO XCPU XFSZ VTALRM PROF WINCH INFO USR1 USR2
 ----
+send the signal to the process <process id> by function
+----
+kill(<process-id>, <signal-id>);
+----
 Some signals can be ignored except SIGSTOP and SIGKILL.
 Normally processes can send signals to the processes with the same *uid* and *gid* or the process with the same process group. Kernel and super user can send signal to everybody.
 
@@ -62,4 +66,5 @@ Normally processes can send signals to the processes with the same *uid* and *gi
 === References
  * Linux Documentation link:https://tldp.org/LDP/tlk/ipc/ipc.html[link]
  * Singnal description in Manual link:https://man7.org/linux/man-pages/man7/signal.7.html[link]
+ * Useful Video link:https://www.youtube.com/watch?v=83M5-NPDeWsp[link]
 
